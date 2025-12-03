@@ -45,6 +45,13 @@ public class Review {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Product product;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "order_Id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Order order;
+
+
+
     public ReviewDto getDto() {
         ReviewDto reviewDto = new ReviewDto();
         reviewDto.setId(id);
@@ -54,6 +61,7 @@ public class Review {
         reviewDto.setProductId(product.getId());
         reviewDto.setUserName(user.getName());
         reviewDto.setDate(date);
+        reviewDto.setOrderId(order.getId());
         List<byte[]> images = reviewImages.stream()
                 .map(ReviewImages::getImage)
                 .collect(Collectors.toList());

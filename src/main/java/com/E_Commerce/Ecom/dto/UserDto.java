@@ -2,6 +2,7 @@ package com.E_Commerce.Ecom.dto;
 
 import com.E_Commerce.Ecom.enums.UserRole;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class UserDto {
@@ -13,4 +14,8 @@ public class UserDto {
     private String name;
 
     private UserRole userRole;
+
+    private byte[] byteImg;
+
+    private MultipartFile img;
 }

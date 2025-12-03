@@ -21,7 +21,7 @@ public class PaymentServiceIplm {
         vnp_Params.put("vnp_Version", "2.1.0");
         vnp_Params.put("vnp_Command", "pay");
         vnp_Params.put("vnp_TmnCode", config.vnp_TmnCode);
-        vnp_Params.put("vnp_Amount", String.valueOf(amount * 100)); // nhân 100 theo yêu cầu VNPAY
+        vnp_Params.put("vnp_Amount", String.valueOf(amount * 100L)); // nhân 100 theo yêu cầu VNPAY
         vnp_Params.put("vnp_CurrCode", "VND");
         vnp_Params.put("vnp_TxnRef", getRandomNumber(8));
         vnp_Params.put("vnp_OrderInfo", orderInfo);

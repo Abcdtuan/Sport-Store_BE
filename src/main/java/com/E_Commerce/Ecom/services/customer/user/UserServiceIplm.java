@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -23,7 +24,28 @@ public class UserServiceIplm implements UserService {
             UserDto userDto = new UserDto();
             userDto.setName(user.get().getName());
             userDto.setEmail(user.get().getEmail());
+            userDto.setByteImg(user.get().getImg());
             return userDto;
+        }
+        return null;
+    }
+
+    public UserDto updateUser(UserDto userDto) throws IOException {
+        Optional<User> optionalUser = userRepository.findById(userDto.getId());
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+            user.setName(userDto.getName());
+
+            if(userDto.getImg() != null && !userDto.getImg().isEmpty()) {
+                user.setImg(userDto.getImg().getBytes());
+            }
+            User savedUser = userRepository.save(user);
+            UserDto updatedUserDto = new UserDto();
+            updatedUserDto.setId(savedUser.getId());
+            updatedUserDto.setName(savedUser.getName());
+            updatedUserDto.setByteImg(savedUser.getImg());
+
+            return updatedUserDto;
         }
         return null;
     }

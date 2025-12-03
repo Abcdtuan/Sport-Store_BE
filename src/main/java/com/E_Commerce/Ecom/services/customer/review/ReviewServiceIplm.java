@@ -47,7 +47,7 @@ public class ReviewServiceIplm implements ReviewService{
                 productDto.setQuantity(cartItems.getQuantity());
                 productDto.setThumbnail(cartItems.getProduct().getDto().getThumbnail());
 
-                boolean reviewed = reviewRepository.existsByUserIdAndProductId(order.getUser().getId(), product.getId());
+                boolean reviewed = reviewRepository.existsByUserIdAndProductIdAndOrderId(order.getUser().getId(), product.getId(), order.getId());
                 productDto.setReviewed(reviewed);
                 productDtoList.add(productDto);
 
@@ -61,6 +61,7 @@ public class ReviewServiceIplm implements ReviewService{
     public ReviewDto giveReview(ReviewDto reviewDto) throws Exception {
         Optional<User> optionalUser = userRepository.findById(reviewDto.getUserId());
         Optional<Product> optionalProduct = productRepository.findById(reviewDto.getProductId());
+        Optional<Order> optionalOrder = orderRepository.findById(reviewDto.getOrderId());
         if (optionalUser.isPresent() && optionalProduct.isPresent()) {
             Review review = new Review();
 
@@ -69,6 +70,7 @@ public class ReviewServiceIplm implements ReviewService{
             review.setDate(LocalDate.now());
             review.setUser(optionalUser.get());
             review.setProduct(optionalProduct.get());
+            review.setOrder(optionalOrder.get());
             if (reviewDto.getImages() != null) {
                 for (MultipartFile file : reviewDto.getImages()) {
                     ReviewImages reviewImage = new ReviewImages();

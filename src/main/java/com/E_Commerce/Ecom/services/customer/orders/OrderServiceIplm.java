@@ -1,7 +1,9 @@
 package com.E_Commerce.Ecom.services.customer.orders;
 
 import com.E_Commerce.Ecom.dto.OrderDto;
+import com.E_Commerce.Ecom.dto.ProductDto;
 import com.E_Commerce.Ecom.entity.Order;
+import com.E_Commerce.Ecom.entity.Product;
 import com.E_Commerce.Ecom.enums.OrderStatus;
 import com.E_Commerce.Ecom.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,8 @@ public class OrderServiceIplm implements OrderService {
         Optional<Order> optionalOrder = orderRepository.findOrderByTrackingId(trackingId);
         return optionalOrder.map(Order::getOrderDto).orElse(null);
     }
+
+
     @Override
     public OrderDto changeOrderStatus(Long id, String status) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
@@ -39,15 +43,12 @@ public class OrderServiceIplm implements OrderService {
             if(Objects.equals(status, "Cancelled")) {
                 if (order.getOrderStatus() == OrderStatus.PLACED) {
                     order.setOrderStatus(OrderStatus.CANCELLED);
-                } else {
-
-                    throw new IllegalStateException("Chỉ có thể hủy đơn hàng khi đang ở trạng thái 'PLACED'.");
                 }
-
             }
-
             return orderRepository.save(order).getOrderDto();
         }
         return null;
     }
+
+
 }

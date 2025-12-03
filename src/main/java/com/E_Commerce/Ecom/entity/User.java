@@ -25,7 +25,6 @@ public class User {
 
     @Lob
     @Column(columnDefinition = "longblob")
-    private byte[] image;
-
+    private byte[] img;
 
 }

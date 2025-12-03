@@ -21,6 +21,8 @@ public class PaymentDto {
 
     private Long orderId;
 
+    private String name;
+
     private Long amount;
 
     private PaymentMethod paymentMethod;

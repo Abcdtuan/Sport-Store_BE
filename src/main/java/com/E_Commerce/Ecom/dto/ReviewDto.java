@@ -28,4 +28,6 @@ public class ReviewDto {
     private Long productId;
 
     private String userName;
+
+    private Long orderId;
 }

@@ -42,6 +42,7 @@ public class Payment {
         dto.setAmount(order.getAmount());
         dto.setPaymentMethod(order.getPaymentMethod());
         dto.setOrderId(order.getId());
+        dto.setName(order.getName());
         return dto;
     }
 

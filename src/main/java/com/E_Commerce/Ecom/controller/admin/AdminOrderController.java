@@ -6,6 +6,7 @@ import com.E_Commerce.Ecom.dto.ProductStatisticDto;
 import com.E_Commerce.Ecom.entity.Order;
 import com.E_Commerce.Ecom.services.admin.order.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,4 +47,12 @@ public class AdminOrderController {
     ){
         return ResponseEntity.ok(orderService.getProductStatisticsForMonth(month, year));
     }
+
+    @GetMapping("/search/{name}")
+    public ResponseEntity<List<OrderDto>> getAllOrdersByName(@PathVariable String name) {
+        List<OrderDto> orderDto = orderService.getAllOrdersByName(name);
+        return  ResponseEntity.status(HttpStatus.OK).body(orderDto);
+    }
+
+
 }

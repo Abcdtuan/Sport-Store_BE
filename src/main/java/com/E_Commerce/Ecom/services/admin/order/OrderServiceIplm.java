@@ -24,7 +24,7 @@ public class OrderServiceIplm implements OrderService {
 
     @Override
     public List<OrderDto> getAllOrders(){
-        List<Order> orderList = orderRepository.findAllByOrderStatusIn(List.of(OrderStatus.PLACED, OrderStatus.SHIPPED, OrderStatus.DELIVERED));
+        List<Order> orderList = orderRepository.findAllByOrderStatusIn(List.of(OrderStatus.PLACED, OrderStatus.SHIPPED, OrderStatus.DELIVERED, OrderStatus.CANCELLED));
 
         return orderList.stream().map(Order::getOrderDto).collect(Collectors.toList());
     }
@@ -38,6 +38,8 @@ public class OrderServiceIplm implements OrderService {
                  order.setOrderStatus(OrderStatus.SHIPPED);
              } else if (Objects.equals(status, "Delivered")) {
                  order.setOrderStatus(OrderStatus.DELIVERED);
+             } else if (Objects.equals(status, "Cancelled")) {
+                 order.setOrderStatus(OrderStatus.CANCELLED);
              }
              return orderRepository.save(order).getOrderDto();
          }
@@ -130,6 +132,14 @@ public class OrderServiceIplm implements OrderService {
 
         return new Date[]{start, end};
     }
+
+    @Override
+    public List<OrderDto> getAllOrdersByName(String name){
+        List<Order> orders = orderRepository.findAllByNameContaining(name);
+        return orders.stream().map(Order::getOrderDto).collect(Collectors.toList());
+    }
+
+
 
 }
 

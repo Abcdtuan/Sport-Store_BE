@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/customer/user")
@@ -22,6 +24,15 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(userDto, HttpStatus.OK);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<UserDto> updateUser(@ModelAttribute UserDto userDto) throws IOException {
+        UserDto userDto1 = userService.updateUser(userDto);
+        if(userDto1 == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(userDto1, HttpStatus.OK);
     }
 
     @PutMapping("/changePassword")

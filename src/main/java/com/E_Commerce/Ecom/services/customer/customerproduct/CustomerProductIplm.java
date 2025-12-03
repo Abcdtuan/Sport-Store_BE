@@ -88,6 +88,7 @@ public class CustomerProductIplm implements CustomerProduct {
                 .mapToLong(Review::getRating)
                 .average()
                 .orElse(0.0);
+        dto.setAverageRating(averageRating);
 
         return dto;
     }
