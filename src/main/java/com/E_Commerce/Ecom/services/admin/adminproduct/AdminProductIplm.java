@@ -128,5 +128,13 @@ public class AdminProductIplm implements AdminProduct {
         }
     }
 
+    public List<ProductDto> getLowStockProducts() {
+        int threshold = 5;
+        List<Product> products = productRepository.findByStockQuantityLessThanEqual((long) threshold);
+        return products.stream()
+                .map(Product::getDto)
+                .collect(Collectors.toList());
+    }
+
 
 }

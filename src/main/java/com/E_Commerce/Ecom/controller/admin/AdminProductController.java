@@ -67,4 +67,10 @@ public class AdminProductController {
         }
 
     }
+
+    @GetMapping("/products/low-stock")
+    public ResponseEntity<List<ProductDto>> getLowStockProducts() {
+        List<ProductDto> productDtos = adminProduct.getLowStockProducts();
+        return ResponseEntity.status(HttpStatus.OK).body(productDtos);
+    }
 }

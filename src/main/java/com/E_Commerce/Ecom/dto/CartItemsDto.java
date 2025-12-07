@@ -24,6 +24,8 @@ public class CartItemsDto {
 
     private byte[] returnedImg;
 
+    private Long remainingStock;
+
 
 
 }

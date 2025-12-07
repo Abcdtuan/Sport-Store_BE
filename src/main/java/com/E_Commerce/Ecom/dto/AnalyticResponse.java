@@ -15,6 +15,8 @@ public class AnalyticResponse {
 
     private Long delivered;
 
+    private Long cancelled;
+
     private Long currentMonthOrders;
 
     private Long previousMonthOrders;

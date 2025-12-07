@@ -148,14 +148,18 @@ public class CartServiceIplm implements CartService {
         if(cartItems.isPresent() && productOptional.isPresent()){
             CartItems cartItems1 = cartItems.get();
             Product product = productOptional.get();
-            activeOrder.setAmount(activeOrder.getAmount() + product.getPrice());
-            activeOrder.setTotalAmount(activeOrder.getTotalAmount() + product.getPrice());
+            if(cartItems1.getQuantity() < product.getStockQuantity()){
+                cartItems1.setQuantity(cartItems1.getQuantity() + 1);
+                activeOrder.setAmount(activeOrder.getAmount() + product.getPrice());
+                activeOrder.setTotalAmount(activeOrder.getTotalAmount() + product.getPrice());
 
-            cartItems1.setQuantity(cartItems1.getQuantity() + 1);
-            applyDiscountIfCouponExists(activeOrder);
-            cartItemRepository.save(cartItems1);
-            orderRepository.save(activeOrder);
-            return activeOrder.getOrderDto();
+                applyDiscountIfCouponExists(activeOrder);
+
+                cartItemRepository.save(cartItems1);
+                orderRepository.save(activeOrder);
+            } else {
+                throw new RuntimeException("Không thể tăng số lượng. Chỉ còn " + product.getStockQuantity() + " sản phẩm trong kho.");
+            }
         }
         return null;
     }
@@ -226,6 +230,13 @@ public class CartServiceIplm implements CartService {
             activeOrder.setPaymentMethod(placeOrderDto.getPaymentMethod());
             activeOrder.setOrderStatus(OrderStatus.PLACED);
             orderRepository.save(activeOrder);
+            for (CartItems item : activeOrder.getCartItems()) {
+                Product product = item.getProduct();
+                long newStock = product.getStockQuantity() - item.getQuantity();
+                if (newStock < 0) newStock = 0;
+                product.setStockQuantity(newStock);
+                productRepository.save(product);
+            }
 
             Payment payment = new Payment();
             payment.setOrder(activeOrder);

@@ -2,10 +2,12 @@ package com.E_Commerce.Ecom.services.customer.orders;
 
 import com.E_Commerce.Ecom.dto.OrderDto;
 import com.E_Commerce.Ecom.dto.ProductDto;
+import com.E_Commerce.Ecom.entity.CartItems;
 import com.E_Commerce.Ecom.entity.Order;
 import com.E_Commerce.Ecom.entity.Product;
 import com.E_Commerce.Ecom.enums.OrderStatus;
 import com.E_Commerce.Ecom.repository.OrderRepository;
+import com.E_Commerce.Ecom.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,8 @@ import java.util.stream.Collectors;
 public class OrderServiceIplm implements OrderService {
 
     private final OrderRepository orderRepository;
+
+    private final ProductRepository productRepository;
 
     @Override
     public List<OrderDto> getAllOrders(Long userId) {
@@ -43,6 +47,12 @@ public class OrderServiceIplm implements OrderService {
             if(Objects.equals(status, "Cancelled")) {
                 if (order.getOrderStatus() == OrderStatus.PLACED) {
                     order.setOrderStatus(OrderStatus.CANCELLED);
+                    for (CartItems item : order.getCartItems()) {
+                        Product product = item.getProduct();
+                        long newStock = product.getStockQuantity() + item.getQuantity();
+                        product.setStockQuantity(newStock);
+                        productRepository.save(product);
+                    }
                 }
             }
             return orderRepository.save(order).getOrderDto();

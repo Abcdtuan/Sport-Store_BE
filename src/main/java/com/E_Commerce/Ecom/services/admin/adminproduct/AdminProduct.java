@@ -19,4 +19,6 @@ public interface AdminProduct {
     ProductDto getProductById(Long id);
 
     ProductDto updateProduct(Long id, ProductDto productDto)  throws IOException;
+
+    List<ProductDto> getLowStockProducts();
 }
